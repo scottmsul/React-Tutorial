@@ -1,0 +1,41 @@
+React can be run as pure javascript without installing anything, see here:
+https://legacy.reactjs.org/docs/add-react-to-a-website.html
+
+React can be loaded into a webpage externally using this:
+(readable development version)
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+(minified production version)
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+There are two different syntaxes for using React, vanilla js and jsx, see here:
+https://stackoverflow.com/questions/46169472/reactjs-js-vs-jsx
+
+To use jsx dynamically, load this script:
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+To convert original js into jsx, use this tool:
+https://babeljs.io/repl
+
+Then use jsx in a <script> tag with type="text/babel".
+Unfortunately it WOULD NOT WORK with an external file src="...", it WOULD ONLY WORK by actually putting ALL the code directly into the <script> tags INSIDE the html.
+This is EXTREMELY frustrating, but it is what it is.
+However dynamic jsx is bad practice and should be avoided anyway, so maybe this isn't a big deal after all.
+
+To compile jsx into js before-hand, first install node.js:
+https://nodejs.org/en
+
+To check that it's installed:
+npm -v
+
+create-react-app
+----------------
+Follow docs here: https://create-react-app.dev/docs/getting-started/
+everything in create_react_app_example
+run "npm install create-react-app" to install create-react-app locally
+run "create-react-app my-app" to create a new app called "my-app"
+run "cd my-app; npm start" to start local node.js server
+
+https://ephemera.medium.com/using-react-with-flask-without-create-react-app-eb81edb641b8
