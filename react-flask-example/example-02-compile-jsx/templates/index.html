@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Flask and React Project</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="{{url_for('static', filename='App.js')}}"></script>
+    <script src="{{url_for('static', filename='index.js')}}"></script>
+</head>
+<body>
+    <p>Hello from Flask Template!</p>
+    <div id="root"></div>
+</body>
+</html>

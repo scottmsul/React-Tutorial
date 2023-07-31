@@ -181,3 +181,74 @@ Main things to note are:
 I'm still not 100% sure how the whole "export name = filename" works in a compiled environment such as npm.
 
 In any case I probably spent more time on this step than I needed, but I learned a few things about Babel and Javascript imports/exports in the process so maybe it was worth it.
+
+### Example 2 - React CDN With Pre-Compiled JSX
+
+The next step lifted the JSX compilation out of the browser using a locally installed version of Babel.
+Like the first example, my goal was to get the full tic-tac-toe example working, with the latest versions of everything.
+I did run into some frustrations (as usual), but eventually got it working.
+This example is in the folder called 'react-flask-example/example-02-compile-jsx'.
+To get it working, run these steps:
+
+```
+npm init -y
+npm install @babel/core
+npm install @babel/cli
+npm install @babel/preset-react
+npx babel src --out-dir static --presets @babel/preset-react
+flask run --debug
+```
+
+The jsx files are located in `src` and compiled with `npx babel` into regular javascript, which are output into the `static` folder.
+There was a little bit of trickiness to figure out the correct install scripts, as the tic-tac-toe requires Babel 7 but the flask+react tutorial was using Babel 6.
+There was one update needed for `App.js` to work, mainly replacing:
+
+```
+export default function Game() {
+    ...
+```
+
+With no export default:
+
+```
+function Game() {
+    ...
+```
+
+With the `export` keyword it was complaining that `App.js` needed to be a module in order to export, but adding `type="module"` did nothing to fix the error.
+There might be a better way to define `App.js` as a module but for now it works and I'm moving on.
+
+There were no changes to `index.js`.
+
+There was one non-trivial change to `index.html`, which now looks like this:
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Flask and React Project</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+</head>
+<body>
+    <p>Hello from Flask Template!</p>
+    <div id="root"></div>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="{{url_for('static', filename='App.js')}}"></script>
+    <script src="{{url_for('static', filename='index.js')}}"></script>
+</body>
+</html>
+```
+
+Mainly the scripts were moved *after* the `<div id="root">` tag.
+Putting them before results in this error:
+
+```
+Uncaught Error: createRoot(...): Target container is not a DOM element.
+```
+
+Searching this error resulted in this [fix](https://www.sharooq.com/solved-createroot-target-container-is-not-a-dom-element).
+Apparently putting the scripts in the `<head>` tag makes the React scripts run before the DOM has fully loaded, making it unable to find the `<div id="root">` element.
+I didn't need to do this in the first example, but that might be because using a CDN for Babel made it wait for Babel to load, causing the React scripts to run after the DOM had fully loaded.
+In any case I'm not 100% sure, but it works and that's good enough for a throwaway example.
